@@ -1,0 +1,40 @@
+language: node_js
+
+node_js:
+  - '6'
+
+# Use container-based Travis infrastructure.
+sudo: required
+dist: trusty
+
+env:
+  - CXX=g++-4.8
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
+
+cache:
+  directories:
+    - node_modules
+addons:
+  at:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+      - google-chrome-beta
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+before_install:
+  - "nvm use $TRAVIS_NODE_VERSION"
+  - npm config set loglevel http
+  - npm install
+notifications:
+  email: true
+
+after_script:
+  - npm run server:cov:publish

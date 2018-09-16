@@ -1,0 +1,72 @@
+{
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/svenanders/norgerundt.git"
+  },
+  "main": "src/index.js",
+  "directories": {
+    "example": "dist"
+  },
+  "scripts": {
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development node index.js",
+    "clean": "rimraf dist && rimraf build",
+    "compress": "NODE_ENV=production npm run build:dist && npm run minify",
+    "copy:prod": "npm run clean && mkdir -p dist &&  cp -R ./assets/ ./dist/assets",
+    "copy:dev": "npm run clean && mkdir build && cp -R ./assets/ ./build/assets && cp index.html ./build",
+    "build:dist": "NODE_ENV=production ./node_modules/.bin/webpack -p --config config/webpack.config.js",
+    "build:dev": "NODE_ENV=development ./node_modules/.bin/webpack --config config/webpack.config.js",
+    "_dev": "NODE_ENV=development npm run copy:dev && npm run build:dev && ./node_modules/.bin/webpack-dev-server --devtool eval --progress --colors  --hot --inline --port 8081 --content-base ./build $WEBPACK_PARAMS",
+    "minify": "inliner -im index.html > ./dist/index.min.html",
+    "preheroku": "npm run makedist",
+    "test": "mocha --compilers js:babel-core/register",
+    "heroku": "git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify -m \"--wip-- [skip ci]\"",
+    "postheroku": "git push heroku master",
+    "dist": "npm run copy:prod && npm run compress",
+    "postdist": "((cat assets/polyfill.js | cat - dist/index.min.html > dist/index.html) & rimraf dist/assets/*.css) && (rimraf dist/index.min.html & rimraf app.js)"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.16.0",
+    "babel-core": "6.18.2",
+    "babel-eslint": "^7.1.1",
+    "babel-loader": "6.2.7",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-external-helpers": "^6.8.0",
+    "babel-plugin-transform-class-properties": "^6.11.5",
+    "babel-plugin-transform-decorators": "^6.13.0",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-runtime": "^6.15.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "exports-loader": "^0.6.3",
+    "hapi-webpack-dev-middleware": "^1.x",
+    "hapi-webpack-hot-middleware": "^1.x",
+    "html-minifier": "^3.2.2",
+    "imports-loader": "^0.6.5",
+    "inliner": "^1.6.0",
+    "jstransform": "^11.0.3",
+    "lodash.identity": "^3.0.0",
+    "lodash.uniq": "^4.5.0",
+    "mocha": "^3.1.2",
+    "rimraf": "^2.4.4",
+    "uglify": "^0.1.5",
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.8.2",
+    "webpack-hot-middleware": "^2.13.2",
+    "whatwg-fetch": "^2.0.1"
+  },
+  "author": "Sven Anders Robbestad",
+  "license": "ISC",
+  "dependencies": {
+    "babel-plugin-inferno": "^5.1.0",
+    "babel-plugin-syntax-jsx": "^6.18.0",
+    "body-parser": "^1.15.2",
+    "compression": "^1.6.0",
+    "curlrequest": "^1.0.1",
+    "hapi": "^15.2.0",
+    "inert": "^4.0.2",
+    "isomorphic-fetch": "^2.2.1",
+    "joi": "^10.0.0"
+  }
+}

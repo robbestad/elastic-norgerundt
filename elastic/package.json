@@ -1,0 +1,18 @@
+{
+  "name": "norgerundt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "sh start.sh",
+    "start": "node index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Sven Anders Robbestad <robbestad@gmail.com> (http://svenardo.com)",
+  "license": "ISC",
+  "dependencies": {
+    "hapi": "^15.2.0",
+    "inert": "^4.0.2"
+  }
+}

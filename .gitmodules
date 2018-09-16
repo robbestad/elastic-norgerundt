@@ -1,0 +1,3 @@
+[submodule "svenjs"]
+	path = svenjs
+	url = git@bitbucket.org:svenanders/svenjs2.git
